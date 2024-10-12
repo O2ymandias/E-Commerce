@@ -1,0 +1,22 @@
+﻿@using AdminDashboard.Controllers
+@model ProductVM
+@{
+	ViewData["Title"] = "Delete";
+}
+
+<h1 class="text-center">
+	Delete
+	<span class="text-danger fw-bold">@Model.Name</span>
+	?
+</h1>
+
+<form asp-action="Delete" method="post">
+	<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+	<input type="hidden" asp-for="PictureUrl" />
+	<partial name="ProductsPartialViews/DetailsDeletePartial" model="@Model" />
+	<br />
+	<div>
+		<input class="btn btn-danger" type="submit" value="Delete" />| 
+		<a class="btn btn-light" asp-action="Index">Back To List</a>
+	</div>
+</form>

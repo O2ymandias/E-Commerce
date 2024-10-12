@@ -1,0 +1,95 @@
+﻿@inject IAuthorizationService authService
+@model IEnumerable<UserVM>
+@{
+	ViewData["Title"] = "Index";
+	var canCreate = await authService.AuthorizeAsync(User, Permissions.Users.Create);
+	var canEdit = await authService.AuthorizeAsync(User, Permissions.Users.Edit);
+	var canDelete = await authService.AuthorizeAsync(User, Permissions.Users.Delete);
+}
+
+<h1 class="text-center">All Users</h1>
+
+@if (canCreate.Succeeded)
+{
+	<a class="btn btn-success mb-2" asp-action="Create">Create New User</a>
+}
+
+<form asp-controller="Users" asp-action="Index" method="get">
+	<div class="input-group mt-3">
+		<input class="form-control" type="search" name="searchInput" placeholder="Search by user name" />
+		<input class="btn btn-primary" type="submit" value="Search">
+	</div>
+</form>
+
+@if (Model.Any())
+{
+	<table class="table table-hover table-bordered mt-3">
+		<thead class="text-center text-light thead-bg-color">
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.DisplayName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.UserName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Email)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.PhoneNumber)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Roles)
+				</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr class="text-center">
+					<td>
+						@Html.DisplayFor(modelItem => item.DisplayName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.UserName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Email)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.PhoneNumber)
+					</td>
+					<td>
+						@string.Join(", ", (item.Roles))
+					</td>
+					<td>
+						@if (canEdit.Succeeded)
+						{
+							<a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+						}
+
+						@if (canDelete.Succeeded)
+						{
+							<a class="btn btn-danger js-delete" href="javascript:;" data-id="@item.Id">Delete</a>
+						}
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<div class="text-center alert alert-warning">
+		No Users ;(
+	</div>
+}
+
+@section Scripts {
+	<script src="~/js/users.js"></script>
+}
+
+
+
+

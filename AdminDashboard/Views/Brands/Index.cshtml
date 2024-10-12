@@ -1,0 +1,74 @@
+﻿@inject IAuthorizationService authService
+@model IReadOnlyList<Brand>
+@{
+	ViewData["Title"] = "Index";
+
+	var canCreate = await authService.AuthorizeAsync(User, Permissions.Brands.Create);
+	var canEdit = await authService.AuthorizeAsync(User, Permissions.Brands.Edit);
+	var canDelete = await authService.AuthorizeAsync(User, Permissions.Brands.Delete);
+}
+
+<h1 class="mb-4">Brands List</h1>
+
+@if (canCreate.Succeeded)
+{
+	<partial name="BrandsPartialViews/CreateBrandPartial" model="new CreateOrEditBrandVM()" />
+}
+
+<form class="form-inline mt-3" asp-action="Index" method="get">
+	<div class="input-group">
+		<input type="search" name="searchInput" class="form-control" placeholder="Brand's name" />
+		<input class="btn btn-primary" type="submit" value="Search" />
+	</div>
+</form>
+
+
+
+@if (Model?.Count > 0)
+{
+	<div class="container mt-4">
+
+		<table class="table table-striped table-hover table-bordered">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th>@Html.DisplayNameFor(model => model.First().Name)</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr class="text-center">
+						<td>@Html.DisplayFor(modelItem => item.Name)</td>
+						<td>
+							@if (canEdit.Succeeded)
+							{
+								<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+							}
+							@if (canDelete.Succeeded)
+							{
+								<a class="btn btn-danger js-delete" href="javascript:;" data-id="@item.Id">Delete</a>
+							}
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+
+}
+else
+{
+	<div class="text-center alert alert-warning">
+		No Brands ;(
+	</div>
+
+}
+
+@section Scripts {
+	<script src="~/js/brands.js"></script>
+}
+
+
+
+

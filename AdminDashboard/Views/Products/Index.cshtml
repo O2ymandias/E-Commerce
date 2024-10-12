@@ -1,0 +1,82 @@
+﻿@model IReadOnlyList<ProductVM>
+@inject IAuthorizationService authService
+@{
+	ViewData["Title"] = "Index";
+	var canCreate = await authService.AuthorizeAsync(User, Permissions.Products.Create);
+	var canEdit = await authService.AuthorizeAsync(User, Permissions.Products.Edit);
+	var canDelete = await authService.AuthorizeAsync(User, Permissions.Products.Delete);
+}
+
+
+@if (Model?.Count > 0)
+{
+	<div class="container mt-4">
+		<h1 class="mb-4">Products List</h1>
+
+		<form asp-controller="Products" asp-action="Index" method="get" class="form-inline mb-4">
+			<div class="form-group mr-2">
+				<input type="search" name="searchInput" class="form-control" placeholder="Product's name" />
+			</div>
+			<input class="btn btn-primary" type="submit" value="Search" />
+		</form>
+
+		@if (canCreate.Succeeded)
+		{
+			<div class="mb-4">
+				<a asp-action="Create" class="btn btn-success">Create New Product</a>
+			</div>
+		}
+
+		<table class="table table-striped table-hover table-bordered">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th>@Html.DisplayNameFor(model => model.First().PictureUrl)</th>
+					<th>@Html.DisplayNameFor(model => model.First().Name)</th>
+					<th>@Html.DisplayNameFor(model => model.First().Price)</th>
+					<th>@Html.DisplayNameFor(model => model.First().Brand)</th>
+					<th>@Html.DisplayNameFor(model => model.First().Category)</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr class="text-center">
+						<td>
+							<img class="rounded" src="~/@item.PictureUrl" alt="Product" height="100px" width="100px" />
+						</td>
+						<td>@Html.DisplayFor(modelItem => item.Name)</td>
+						<td>@Html.DisplayFor(modelItem => item.Price)</td>
+						<td>@Html.DisplayFor(modelItem => item.Brand)</td>
+						<td>@Html.DisplayFor(modelItem => item.Category)</td>
+						<td>
+							@if (canEdit.Succeeded)
+							{
+								<a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+							}
+
+							@if (canDelete.Succeeded)
+							{
+								<a class="btn btn-danger js-delete" href="javascript:;" data-id="@item.Id">Delete</a>
+							}
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+
+}
+else
+{
+	<div class=" text-center alert alert-warning">
+		No Products;(
+	</div>
+}
+
+@section Scripts {
+	<script src="~/js/products.js"></script>
+}
+
+
+

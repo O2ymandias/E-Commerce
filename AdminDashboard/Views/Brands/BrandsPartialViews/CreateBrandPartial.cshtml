@@ -1,0 +1,14 @@
+﻿@model CreateOrEditBrandVM
+
+<form asp-action="Create" method="post">
+	<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+	<div class="input-group mt-3">
+		<input class="form-control" asp-for="BrandName" placeholder="Brand's Name"/>
+		<input class="btn btn-success" type="submit" value="Create" />
+	</div>
+	<span class="text-danger" asp-validation-for="BrandName"></span>
+</form>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

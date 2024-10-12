@@ -1,0 +1,33 @@
+﻿@model CreateOrEditProductVM
+@{
+	ViewData["Title"] = "Edit";
+}
+
+<h1 class="text-center">
+	Edit
+	<span class="text-warning fw-bold">@Model.Name</span>
+	?
+</h1>
+<center>
+	<img class="rounded" src="~/@Model.PictureUrl" alt="Product's Picture" height="150px" width="150px" />
+</center>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+	<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+	<input type="hidden" asp-for="PictureUrl" value="@Model.PictureUrl" />
+
+	<partial name="ProductsPartialViews/CreateEditPartial" model="Model" />
+
+	<br />
+
+	<div>
+		<input class="btn btn-warning" type="submit" value="Save" />|
+		<a class="btn btn-light" asp-action="Index">Back To List</a>
+	</div>
+</form>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
+

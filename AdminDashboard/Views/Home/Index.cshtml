@@ -1,0 +1,64 @@
+﻿@inject IAuthorizationService authService
+@{
+	ViewData["Title"] = "Home Page";
+	var canViewProducts = await authService.AuthorizeAsync(User, Permissions.Products.View);
+	var canViewBrands = await authService.AuthorizeAsync(User, Permissions.Brands.View);
+	var canViewCategories = await authService.AuthorizeAsync(User, Permissions.Categories.View);
+	var canViewUsers = await authService.AuthorizeAsync(User, Permissions.Users.View);
+	var canViewRoles = await authService.AuthorizeAsync(User, Permissions.Roles.View);
+}
+
+<div class="text-center">
+	<h1 class="display-4 text-success">Admin Dashboard Overview</h1>
+
+	<!-- Security Section -->
+	<h2 class="section-title">Security</h2>
+	<table class="table table-hover table-bordered table-striped resized-table">
+		@if (canViewUsers.Succeeded)
+		{
+			<tr>
+				<td>
+					<a class="btn btn-link" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+				</td>
+			</tr>
+		}
+		@if (canViewRoles.Succeeded)
+		{
+			<tr>
+				<td>
+					<a class="btn btn-link" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
+				</td>
+			</tr>
+		}
+	</table>
+
+	<!-- Web Application Section -->
+	<h2 class="section-title">E-Commerce</h2>
+	<table class="table table-hover table-bordered table-striped resized-table">
+		@if (canViewProducts.Succeeded)
+		{
+			<tr>
+				<td>
+					<a class="btn btn-link" asp-controller="Products" asp-action="Index">Products</a>
+				</td>
+			</tr>
+		}
+		@if (canViewBrands.Succeeded)
+		{
+			<tr>
+				<td>
+					<a class="btn btn-link" asp-controller="Brands" asp-action="Index">Brands</a>
+				</td>
+			</tr>
+		}
+
+		@if (canViewCategories.Succeeded)
+		{
+			<tr>
+				<td>
+					<a class="btn btn-link" asp-controller="Categories" asp-action="Index">Categories</a>
+				</td>
+			</tr>
+		}
+	</table>
+</div>

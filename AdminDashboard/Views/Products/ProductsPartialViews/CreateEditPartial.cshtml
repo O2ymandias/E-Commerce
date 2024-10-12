@@ -1,0 +1,49 @@
+﻿@using ECommerce.Core.Entities.ProductModule
+@model CreateOrEditProductVM
+@inject IUnitOfWork unitOfWork
+@{
+	var brands = await unitOfWork.Repository<Brand>().GetAllAsync();
+	var brandsSelectList = new SelectList(brands, nameof(Brand.Id), nameof(Brand.Name));
+
+	var categories = await unitOfWork.Repository<Category>().GetAllAsync();
+	var categoriesSelectList = new SelectList(categories, nameof(Category.Id), nameof(Category.Name));
+
+}
+
+<div class="form-group">
+	<label class="form-label" asp-for="Name"></label>
+	<input class="form-control" asp-for="Name" />
+	<span class="text-danger" asp-validation-for="Name"></span>
+</div>
+<br />
+<div class="form-group">
+	<label class="form-label" asp-for="Price"></label>
+	<input class="form-control" asp-for="Price" />
+	<span class="text-danger" asp-validation-for="Price"></span>
+</div>
+<br />
+<div class="form-group">
+	<label class="form-label" asp-for="Description"></label>
+	<input class="form-control" asp-for="Description" />
+	<span class="text-danger" asp-validation-for="Description"></span>
+</div>
+<br />
+<div class="form-group">
+	<select class="form-control form-select" asp-for="BrandId" asp-items="brandsSelectList">
+		<option style="text-align:center" value="@null">--------------Select Brand--------------</option>
+	</select>
+	<span class="text-danger" asp-validation-for="BrandId"></span>
+</div>
+<br />
+<div class="form-group">
+	<select class="form-control form-select" asp-for="CategoryId" asp-items="categoriesSelectList">
+		<option style="text-align:center" value="@null">--------------Select Category--------------</option>
+	</select>
+	<span class="text-danger" asp-validation-for="BrandId"></span>
+</div>
+<br />
+<div class="form-group">
+	<label class="form-label" asp-for="Picture"></label>
+	<input class="form-control" type="file" asp-for="Picture" />
+	<span class="text-danger" asp-validation-for="Picture"></span>
+</div>

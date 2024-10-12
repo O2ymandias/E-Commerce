@@ -1,0 +1,75 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+
+
+/* Custom styles for the table */
+.resized-table {
+    width: 80%; /* Adjust the table width */
+    margin: 20px auto; /* Center the table with some margin */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow for a lifted effect */
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden; /* Ensure rounded corners for children */
+}
+
+    .resized-table td {
+        width: 50%; /* Adjust the cell width */
+        text-align: center; /* Center text in the cells */
+    }
+
+    .resized-table a {
+        display: block;
+        padding: 10px 20px;
+        color: #007bff;
+        text-decoration: none;
+        transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+    }
+
+        .resized-table a:hover {
+            background-color: #007bff;
+            color: #fff; /* White text on hover */
+        }
+
+/* Additional styles for the page */
+.text-center {
+    margin-top: 50px; /* Add some top margin */
+}
+
+h1.display-4 {
+    margin-bottom: 30px; /* Add some bottom margin */
+    font-weight: bold;
+    color: #333;
+}
+
+.section-title {
+    margin-top: 40px; /* Add some top margin for section titles */
+    margin-bottom: 20px; /* Add some bottom margin for section titles */
+    font-size: 24px; /* Increase font size for section titles */
+    font-weight: bold; /* Make section titles bold */
+    color: #555; /* Change color of section titles */
+    text-align: left; /* Align section titles to the left */
+}
+
+.thead-bg-color{
+    background-color:darkcyan;
+}

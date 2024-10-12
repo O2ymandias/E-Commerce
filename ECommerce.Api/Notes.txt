@@ -1,0 +1,63 @@
+﻿The Difference Between Middleware & Action Filter
+Middleware:
+	1. It can handle requests both before they reach MVC framework and after they leave it.
+	2. Middleware can be used to process requests globally, affecting all incoming HTTP requests to the application.
+	3. It can be used to short-circuit the request pipeline and stop further processing if certain conditions are met.
+	For example:
+		A request sent to get a static file (html/css/.png),
+		once the request reachs the app.UseStaticFile() it short-circuit without even reaching the upcoming middlewares
+		or reaching global action filter
+				 
+
+ActionFilters:
+	1. They run before and after controller actions.
+	2. Action filters can be applied globally, to a controller, or to individual actions.
+	3. It can be registered globally via:
+		builder.Services
+			.AddControllers(config =>
+			{
+				config.Filters.Add(typeof(CustomExceptionFilter));
+			})
+------------------------------------------------------------------------------------------------------------------------------------
+												** Configurations **
+
+In ASP.NET Core, configuration settings are loaded from various sources following a specific order of precedence.
+This order determines which value takes effect for a particular key if the same key is defined in multiple sources.
+Here's the breakdown of the order:
+
+1. appsettings.json: This is the primary configuration file containing general application settings.
+
+2. appsettings.{Environment}.json (Optional): For each environment (e.g., Development, Production),
+you can have an environment-specific settings file that overrides values in the general appsettings.json.
+
+3. User Secrets: These are sensitive settings stored securely in the project and not included in source control.
+
+4. Environment Variables: Environment variables set on the system or container where the application runs can be accessed for configuration.
+
+5. Command-line Arguments: Configuration values can be provided directly during application startup using command-line arguments.
+The key thing to remember is that sources are loaded sequentially,
+and settings with the same key from later sources override those from earlier sources.
+This allows you to define default values in appsettings.json,
+customize them for specific environments,
+and finally override them with even more specific settings from user secrets, environment variables, or command-line arguments.
+
+
+** The Difference Between IOptions<> & IOptionsSnapshot **
+IOptions<>
+	Purpose: Provides access to configuration options.
+	Lifetime: Singleton.
+	Usage: IOptions<> is designed to be used for options that do not change during the application's lifetime.
+	It captures the configuration values at the time the application starts and those values remain constant.
+
+IOptionsSnapshot<>
+	Purpose: Provides access to configuration options that can be reloaded on a per-request basis.
+	Lifetime: Scoped.
+	Usage: IOptionsSnapshot<> is used for options that may change during the application's lifetime.
+	It allows you to capture the current value of the options at the time the request is processed.
+	This is useful in scenarios where you expect configuration changes and want those changes to be picked up without restarting the application.
+
+IOptionsMonitor<>
+	Purpose: Provides access to configuration options and supports change notifications.
+	Lifetime: Singleton.
+	Usage: IOptionsMonitor<> is designed for scenarios where you need to react to configuration changes immediately.
+	It provides the current value of the options and allows you to register callbacks to be invoked whenever the options are reloaded.

@@ -1,0 +1,8 @@
+﻿How it works:
+	1. The [Authorize(Policy = "Content.Read")] attribute triggers a request for the policy named "Permissions.Products.Read"
+
+	2. The PermissionPolicyProvider intercepts this request and creates a new AuthorizationPolicy with a PermissionRequirement("Permissions.Products.Read")
+
+	3. This policy is passed to the PermissionAuthorizationHandler, which checks if the user has the corresponding claim (Permission. Products.Read).
+
+	4. If the user has this permission, they are authorized to access the resource.

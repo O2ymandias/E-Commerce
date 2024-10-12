@@ -1,0 +1,78 @@
+﻿@model IEnumerable<RoleVM>
+@inject IAuthorizationService authService
+
+@{
+	ViewData["Title"] = "Index";
+	var canView = await authService.AuthorizeAsync(User, Permissions.Roles.View);
+	var canCreate = await authService.AuthorizeAsync(User, Permissions.Roles.Create);
+	var canEdit = await authService.AuthorizeAsync(User, Permissions.Roles.Edit);
+	var canDelete = await authService.AuthorizeAsync(User, Permissions.Roles.Delete);
+}
+
+
+
+<h1 class="text-center">All Roles</h1>
+
+@if (canCreate.Succeeded)
+{
+	<partial name="RolesPartialViews/CreateRolePartial" model="new CreateRoleVM()" />
+}
+
+<form asp-controller="Roles" asp-action="Index" method="get">
+	<div class="input-group mt-3">
+		<input class="form-control" type="search" name="searchInput" placeholder="Search by role name" />
+		<input class="btn btn-primary" type="submit" value="Search">
+	</div>
+</form>
+
+@if (Model.Any())
+{
+	<table class="table table-hover table-bordered mt-3">
+		<thead class="text-center text-light thead-bg-color">
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Name)
+				</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr class="text-center">
+					<td>
+						@Html.DisplayFor(modelItem => item.Name)
+					</td>
+					<td>
+						@if (canEdit.Succeeded)
+						{
+							<a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+						}
+
+						@if (canView.Succeeded)
+						{
+							<a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+						}
+
+						@if (canDelete.Succeeded)
+						{
+							<a class="btn btn-danger js-delete" href="javascript:;" data-id="@item.Id">Delete</a>
+						}
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<div class="text-center alert alert-warning">
+		No Roles ;(
+	</div>
+}
+
+@section Scripts {
+	<script src="~/js/roles.js"></script>
+}
+
+
